@@ -6,5 +6,4 @@ import org.eclipse.jdt.core.dom.Statement;
 
 public interface JdiObjectResolver<T, V extends ObjectReference> extends JdiValueResolver<T,V> {
 
-    Statement[] writeStatements(T javaType, AST ast);
 }

@@ -162,47 +162,4 @@ public class CodeGenerator {
        return (T) jdiVr.readValue(clazz, objectRef);
     }
 
-    <T> void setField(T target, java.lang.reflect.Field field, Value valueRef) throws IllegalAccessException {
-        if (valueRef instanceof BooleanValue) {
-            FieldUtils.writeField(field, target, Boolean.parseBoolean(valueRef.toString()), true);
-        } else if (valueRef instanceof StringReferenceImpl) {
-            FieldUtils.writeField(field, target, ((StringReferenceImpl) valueRef).value(), true);
-        }
-        else if (valueRef instanceof PrimitiveValue) {
-            Object valueToSet = null;
-            if (valueRef instanceof DoubleValue) {
-                valueToSet = ((DoubleValue) valueRef).value();
-            } else if (valueRef instanceof LongValue) {
-                valueToSet = ((LongValue) valueRef).value();
-            } else if (valueRef instanceof FloatValue) {
-                valueToSet = ((FloatValue) valueRef).value();
-            }
-            else if (valueRef instanceof IntegerValue) {
-                valueToSet = ((IntegerValue) valueRef).value();
-            }else if (valueRef instanceof ShortValue) {
-                valueToSet = ((ShortValue) valueRef).value();
-            }
-            //all number classes
-            FieldUtils.writeField(field, target, valueToSet, true);
-        }
-    }
-
-    Object createObjectFromReference(PrimitiveValue primitiveValue) {
-        Object returnObject = null;
-        return returnObject;
-    }
-
-    String createObjectFromReference(StringReference stringReference) {
-        return null;
-    }
-
-    private Class getModuleClass(String className, UrlClassLoader loader) throws ClassNotFoundException {
-        Class fieldClass = null;
-        try {
-            fieldClass = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            fieldClass = Class.forName(className, true, loader);
-        }
-        return fieldClass;
-    }
 }

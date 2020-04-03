@@ -1,9 +1,10 @@
 package com.perso;
 
 import com.sun.jdi.IntegerValue;
-import com.sun.jdi.LongValue;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
+
+import java.util.List;
 
 public class JdiIntegerResolver extends AbstractJdiPrimitiveTypeResolver<Integer, IntegerValue> {
 
@@ -13,7 +14,7 @@ public class JdiIntegerResolver extends AbstractJdiPrimitiveTypeResolver<Integer
     }
 
     @Override
-    public Expression writeExpression(Integer object, AST ast) {
+    public Expression writeExpression(Integer object, AST ast, List accumulatedStatements) {
         Expression s = ast.newNumberLiteral(String.valueOf(object));
         return s;
     }

@@ -1,5 +1,6 @@
 package com.perso;
 
+import com.google.common.base.CaseFormat;
 import com.intellij.util.lang.UrlClassLoader;
 import com.sun.jdi.Field;
 import com.sun.jdi.ObjectReference;
@@ -7,20 +8,21 @@ import com.sun.jdi.Value;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.Statement;
 
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> implements JdiObjectResolver<T, V> {
     protected UrlClassLoader loader;
 
-    public AbstractJdiObjectResolver(UrlClassLoader loader) {
-        this.loader = loader;
+    protected static int counter = 0;
+
+    protected String createVariableName(String clazzName) {
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazzName + counter++);
     }
 
-    @Override
-    public Statement[] writeStatements(T javaType, AST ast) {
-        return new Statement[0];
+    public AbstractJdiObjectResolver(UrlClassLoader loader) {
+        this.loader = loader;
     }
 
     @Override
@@ -38,7 +40,8 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
     }
 
     @Override
-    public Expression writeExpression(T object, AST ast) {
+    public Expression writeExpression(T object, AST ast, List accumulatedStatements) {
+
         return null;
     }
 

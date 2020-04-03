@@ -3,9 +3,10 @@ package com.perso;
 import com.google.gson.internal.Primitives;
 import com.sun.jdi.ObjectReference;
 import com.sun.jdi.PrimitiveValue;
-import com.sun.jdi.Value;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
+
+import java.util.List;
 
 public class JdiPrimitiveWrapperResolver extends AbstractJdiPrimitiveTypeResolver<Object, ObjectReference> {
 
@@ -18,10 +19,10 @@ public class JdiPrimitiveWrapperResolver extends AbstractJdiPrimitiveTypeResolve
     }
 
     @Override
-    public Expression writeExpression(Object object, AST ast) {
+    public Expression writeExpression(Object object, AST ast, List accumulatedStatements) {
         Class primitiveClazz = Primitives.unwrap(object.getClass());
         JdiSimpleTypeResolver primitiveResolver = (JdiSimpleTypeResolver) ResolverFactory.getResolverByClass(primitiveClazz, null);
-        return primitiveResolver.writeExpression(object, ast);
+        return primitiveResolver.writeExpression(object, ast, );
     }
 
 }

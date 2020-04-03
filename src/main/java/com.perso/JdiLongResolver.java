@@ -4,6 +4,8 @@ import com.sun.jdi.LongValue;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
 
+import java.util.List;
+
 public class JdiLongResolver extends AbstractJdiPrimitiveTypeResolver<Long, LongValue> {
 
     @Override
@@ -12,7 +14,7 @@ public class JdiLongResolver extends AbstractJdiPrimitiveTypeResolver<Long, Long
     }
 
     @Override
-    public Expression writeExpression(Long object, AST ast) {
+    public Expression writeExpression(Long object, AST ast, List accumulatedStatements) {
         return ast.newNumberLiteral(String.valueOf(object));
     }
 

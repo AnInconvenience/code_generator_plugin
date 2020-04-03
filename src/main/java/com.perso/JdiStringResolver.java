@@ -4,6 +4,8 @@ import com.sun.jdi.StringReference;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
 
+import java.util.List;
+
 public class JdiStringResolver implements JdiSimpleTypeResolver<String, StringReference>{
 
     @Override
@@ -17,7 +19,7 @@ public class JdiStringResolver implements JdiSimpleTypeResolver<String, StringRe
     }
 
     @Override
-    public Expression writeExpression(String object, AST ast) {
+    public Expression writeExpression(String object, AST ast, List accumulatedStatements) {
         return null;
     }
 }

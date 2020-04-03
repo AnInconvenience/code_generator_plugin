@@ -4,6 +4,8 @@ import com.sun.jdi.DoubleValue;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
 
+import java.util.List;
+
 public class JdiDoubleResolver extends AbstractJdiPrimitiveTypeResolver<Double, DoubleValue> {
 
     @Override
@@ -12,7 +14,7 @@ public class JdiDoubleResolver extends AbstractJdiPrimitiveTypeResolver<Double, 
     }
 
     @Override
-    public Expression writeExpression(Double object, AST ast) {
+    public Expression writeExpression(Double object, AST ast, List accumulatedStatements) {
         return ast.newNumberLiteral(String.valueOf(object));
     }
 }

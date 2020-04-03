@@ -1,10 +1,11 @@
 package com.perso;
 
 import com.sun.jdi.CharValue;
-import com.sun.jdi.ShortValue;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.Expression;
+
+import java.util.List;
 
 public class JdiCharResolver extends AbstractJdiPrimitiveTypeResolver<Character, CharValue> {
 
@@ -14,7 +15,7 @@ public class JdiCharResolver extends AbstractJdiPrimitiveTypeResolver<Character,
     }
 
     @Override
-    public Expression writeExpression(Character object, AST ast) {
+    public Expression writeExpression(Character object, AST ast, List accumulatedStatements) {
         CharacterLiteral cl = ast.newCharacterLiteral();
         cl.setCharValue(object);
         return cl;
