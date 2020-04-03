@@ -158,52 +158,8 @@ public class CodeGenerator {
     }
 
     <T> T createObjectFromReference(Class<T> clazz, ObjectReference objectRef, UrlClassLoader loader) throws IllegalAccessException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
-        T result = clazz.newInstance();
-        if (clazz == ArrayList.class) {
-            ArrayReference arrayVal = (ArrayReference) objectRef.getValue(objectRef.referenceType().fieldByName("elementData"));
-            List list = new ArrayList<>();
-            for (Value v : arrayVal.getValues()) {
-                if (v == null) continue;
-                list.add(createObjectFromReference(getModuleClass(v.type().name(), loader), (ObjectReference)v, loader));
-            }
-            result = (T) list;
-        } else if (clazz == HashMap.class) {
-            ArrayReference arr = (ArrayReference) objectRef.getValue(objectRef.referenceType().fieldByName("table"));
-            Map map = new HashMap();
-            for (Value node : arr.getValues()) {
-                if (node == null) continue;
-                ObjectReference nodeObj = (ObjectReference)node;
-                Value mapKey = nodeObj.referenceType().getValue(nodeObj.referenceType().fieldByName("key"));
-                Value mapValue = nodeObj.referenceType().getValue(nodeObj.referenceType().fieldByName("value"));
-            }
-        }
-        else if (clazz == Date.class) {
-            Value fastTimeVal = objectRef.getValue(objectRef.referenceType().fieldByName("fastTime"));
-            setField(result, clazz.getDeclaredField("fastTime"), fastTimeVal);
-        }  else{
-            Map<Field, Value> valueMap = objectRef.getValues(objectRef.referenceType().fields());
-            for (Map.Entry<Field, Value> entry : valueMap.entrySet()) {
-                Field field = entry.getKey();
-                Value value = entry.getValue();
-                if (value instanceof ObjectReference) {
-                    Class fieldClass = getModuleClass(field.typeName(), loader);
-                    if (Primitives.isWrapperType(fieldClass)) {
-                        Value primitiveValue = ((ObjectReferenceImpl)value).getValue(((ObjectReferenceImpl)value).referenceType().fieldByName("value"));
-                        setField(result, clazz.getDeclaredField(field.name()), primitiveValue);
-                    } else if (value instanceof StringReferenceImpl) {
-                        setField(result, clazz.getDeclaredField(field.name()), value);
-                    }else {
-                        if (fieldClass == List.class) {
-                            fieldClass = ArrayList.class;
-                        }
-                        FieldUtils.writeField(clazz.getDeclaredField(field.name()), result, createObjectFromReference(fieldClass, (ObjectReference)value, loader), true);
-                    }
-                } else {
-                    setField(result, clazz.getDeclaredField(field.name()), value);
-                }
-            }
-        }
-        return result;
+       JdiValueResolver jdiVr = ResolverFactory.getResolverByClass(clazz, loader);
+       return (T) jdiVr.readValue(clazz, objectRef);
     }
 
     <T> void setField(T target, java.lang.reflect.Field field, Value valueRef) throws IllegalAccessException {

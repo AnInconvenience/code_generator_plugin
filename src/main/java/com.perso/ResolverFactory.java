@@ -5,47 +5,49 @@ import com.intellij.util.lang.UrlClassLoader;
 public class ResolverFactory {
 
     //final UrlClassLoader urlClassLoader;
-    static JdiLongResolver _jdiLongResolver = null;
-    static JdiCharResolver _jdiCharResolver = null;
-    static JdiShortResolver _jdiShortResolver = null;
-    static JdiIntegerResolver _jdiIntegerResolver = null;
-    static JdiFloatResolver _jdiFloatResolver = null;
-    static JdiByteResolver _jdiByteResolver = null;
-    static JdiDoubleResolver _jdiDoubleResolver = null;
-    static JdiStringResolver _jdiStringResolver = null;
-    static JdiDateResolver _jdiDateResolver = null;
-    static JdiBooleanResolver _jdiBooleanResolver = null;
-    static JdiArrayListResolver _jdiListResolver = null;
-    static JdiHashMapResolver _jdiMapResolver = null;
+    private static JdiLongResolver _jdiLongResolver = null;
+    private static JdiCharResolver _jdiCharResolver = null;
+    private static JdiShortResolver _jdiShortResolver = null;
+    private static JdiIntegerResolver _jdiIntegerResolver = null;
+    private static JdiFloatResolver _jdiFloatResolver = null;
+    private static JdiByteResolver _jdiByteResolver = null;
+    private static JdiDoubleResolver _jdiDoubleResolver = null;
+    private static JdiStringResolver _jdiStringResolver = null;
+    private static JdiDateResolver _jdiDateResolver = null;
+    private static JdiBooleanResolver _jdiBooleanResolver = null;
+    private static JdiArrayListResolver _jdiListResolver = null;
+    private static JdiHashMapResolver _jdiMapResolver = null;
+    private static JdiPrimitiveWrapperResolver _jdiPrimitiveWrapperResolver = null;
 
     public static JdiValueResolver getResolverByClass(Class clazz, UrlClassLoader loader) {
         ClassEnum javaBasicClass = ClassEnum.getByClass(clazz);
         if (javaBasicClass != null) {
             switch (javaBasicClass) {
-                case LONG:
-                case LONG_PRIMITIVE:
-                    return getJdiLongResolver();
-                case CHAR:
-                case CHAR_PRIMITIVE:
-                    return getJdiCharResolver();
-                case BYTE:
-                case BYTE_PRIMITIVE:
-                    return getJdiByteResolver();
-                case SHORT:
-                case SHORT_PRIMITIVE:
-                    return getJdiShortResolver();
-                case INTEGER:
-                case INTEGER_PRIMITIVE:
-                    return getJdiIntegerResolver();
-                case FLOAT:
-                case FLOAT_PRIMITIVE:
-                    return getJdiFloatResolver();
-                case DOUBLE:
-                case DOUBLE_PRIMITIVE:
-                    return getJdiDoubleResolver();
                 case BOOLEAN:
+                case BYTE:
+                case CHAR:
+                case DOUBLE:
+                case FLOAT:
+                case INTEGER:
+                case LONG:
+                case SHORT:
+                    return getJdiPrimitiveWrapperResolver();
                 case BOOLEAN_PRIMITIVE:
                     return getJdiBooleanResolver();
+                case BYTE_PRIMITIVE:
+                    return getJdiByteResolver();
+                case CHAR_PRIMITIVE:
+                    return getJdiCharResolver();
+                case DOUBLE_PRIMITIVE:
+                    return getJdiDoubleResolver();
+                case FLOAT_PRIMITIVE:
+                    return getJdiFloatResolver();
+                case INTEGER_PRIMITIVE:
+                    return getJdiIntegerResolver();
+                case LONG_PRIMITIVE:
+                    return getJdiLongResolver();
+                case SHORT_PRIMITIVE:
+                    return getJdiShortResolver();
                 case LIST:
                 case ARRAY_LIST:
                     return getJdiListResolver(loader);
@@ -61,87 +63,94 @@ public class ResolverFactory {
         return new JdiObjectResolverImpl(loader);
     }
 
-    public static JdiLongResolver getJdiLongResolver() {
+    private final static JdiLongResolver getJdiLongResolver() {
         if (_jdiLongResolver == null) {
             _jdiLongResolver = new JdiLongResolver();
         }
         return _jdiLongResolver;
     }
 
-    public static JdiCharResolver getJdiCharResolver() {
+    private final static JdiCharResolver getJdiCharResolver() {
         if (_jdiCharResolver == null) {
             _jdiCharResolver = new JdiCharResolver();
         }
         return _jdiCharResolver;
     }
 
-    public static JdiShortResolver getJdiShortResolver() {
+    private final static JdiShortResolver getJdiShortResolver() {
         if (_jdiShortResolver == null) {
             _jdiShortResolver = new JdiShortResolver();
         }
         return _jdiShortResolver;
     }
 
-    public static JdiIntegerResolver getJdiIntegerResolver() {
+    private final static JdiIntegerResolver getJdiIntegerResolver() {
         if (_jdiIntegerResolver == null) {
             _jdiIntegerResolver = new JdiIntegerResolver();
         }
         return _jdiIntegerResolver;
     }
 
-    public static JdiFloatResolver getJdiFloatResolver() {
+    private final static JdiFloatResolver getJdiFloatResolver() {
         if (_jdiFloatResolver == null) {
             _jdiFloatResolver = new JdiFloatResolver();
         }
         return _jdiFloatResolver;
     }
 
-    public static JdiDoubleResolver getJdiDoubleResolver() {
+    private final static JdiDoubleResolver getJdiDoubleResolver() {
         if (_jdiDoubleResolver == null) {
             _jdiDoubleResolver = new JdiDoubleResolver();
         }
         return _jdiDoubleResolver;
     }
 
-    public static JdiBooleanResolver getJdiBooleanResolver() {
+    private final static JdiBooleanResolver getJdiBooleanResolver() {
         if (_jdiBooleanResolver == null) {
             _jdiBooleanResolver = new JdiBooleanResolver();
         }
         return _jdiBooleanResolver;
     }
 
-    public static JdiArrayListResolver getJdiListResolver(UrlClassLoader urlClassLoader) {
+    private final static JdiArrayListResolver getJdiListResolver(UrlClassLoader urlClassLoader) {
         if (_jdiListResolver == null) {
             _jdiListResolver = new JdiArrayListResolver(urlClassLoader);
         }
         return _jdiListResolver;
     }
 
-    public static JdiHashMapResolver getJdiMapResolver(UrlClassLoader urlClassLoader) {
+    private final static JdiHashMapResolver getJdiMapResolver(UrlClassLoader urlClassLoader) {
         if (_jdiMapResolver == null) {
             _jdiMapResolver = new JdiHashMapResolver(urlClassLoader);
         }
         return _jdiMapResolver;
     }
 
-    public static JdiByteResolver getJdiByteResolver() {
+    private final static JdiByteResolver getJdiByteResolver() {
         if (_jdiByteResolver == null) {
             _jdiByteResolver = new JdiByteResolver();
         }
         return _jdiByteResolver;
     }
 
-    public static JdiStringResolver getJdiStringResolver() {
+    private final static JdiStringResolver getJdiStringResolver() {
         if (_jdiStringResolver == null) {
             _jdiStringResolver = new JdiStringResolver();
         }
         return _jdiStringResolver;
     }
 
-    public static JdiDateResolver getJdiDateResolver(UrlClassLoader urlClassLoader) {
+    private final static JdiDateResolver getJdiDateResolver(UrlClassLoader urlClassLoader) {
         if (_jdiDateResolver == null) {
             _jdiDateResolver = new JdiDateResolver(urlClassLoader);
         }
         return _jdiDateResolver;
+    }
+
+    private final static JdiPrimitiveWrapperResolver getJdiPrimitiveWrapperResolver() {
+        if (_jdiPrimitiveWrapperResolver == null) {
+            _jdiPrimitiveWrapperResolver = new JdiPrimitiveWrapperResolver();
+        }
+        return _jdiPrimitiveWrapperResolver;
     }
 }

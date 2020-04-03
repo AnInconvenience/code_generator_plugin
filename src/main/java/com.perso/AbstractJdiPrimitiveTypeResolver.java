@@ -1,8 +1,9 @@
 package com.perso;
 
 import com.sun.jdi.PrimitiveValue;
+import com.sun.jdi.Value;
 
-public abstract class AbstractJdiPrimitiveTypeResolver <T, V extends PrimitiveValue> implements JdiSimpleTypeResolver<T, V> {
+public abstract class AbstractJdiPrimitiveTypeResolver <T, V extends Value> implements JdiSimpleTypeResolver<T, V> {
 
     @Override
     public final Class getClassFromName(String name) throws ClassNotFoundException {
