@@ -1,0 +1,26 @@
+<idea-plugin>
+    <id>com.perso.code_generator_plugin</id>
+    <name>code generator</name>
+    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="com.perso.GenerateDebugSource" class="com.perso.GenerateDebugSource" text="AAAAAAAAAAAAAAAAAAAA">
+            <add-to-group group-id="XDebugger.ValueGroup" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
