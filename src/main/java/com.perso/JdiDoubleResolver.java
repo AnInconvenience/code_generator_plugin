@@ -15,6 +15,8 @@ public class JdiDoubleResolver extends AbstractJdiPrimitiveTypeResolver<Double, 
 
     @Override
     public Expression writeExpression(Double object, AST ast, List accumulatedStatements) {
-        return ast.newNumberLiteral(String.valueOf(object));
+        String objectAsString = String.valueOf(object);
+        objectAsString += "D";
+        return ast.newNumberLiteral(objectAsString);
     }
 }

@@ -6,16 +6,20 @@ import com.sun.jdi.Field;
 import com.sun.jdi.ObjectReference;
 import com.sun.jdi.Value;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.*;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> implements JdiObjectResolver<T, V> {
     protected UrlClassLoader loader;
 
-    protected static int counter = 0;
+    protected int counter = 0;
 
     protected String createVariableName(String clazzName) {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazzName + counter++);
@@ -40,9 +44,65 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
     }
 
     @Override
-    public Expression writeExpression(T object, AST ast, List accumulatedStatements) {
+    public Expression writeExpression(T object, AST ast, List statements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+        SimpleName objectVarName = appendObjectInstanciationStatement(object, ast, statements);
+        BeanInfo beanInfo = Introspector.getBeanInfo(object.getClass());
+        for (PropertyDescriptor propertyDesc : beanInfo.getPropertyDescriptors()) {
+            String propertyName = propertyDesc.getName();
+            if (!shouldIgnore(propertyName) && propertyDesc.getWriteMethod() != null && propertyDesc.getReadMethod() != null) {
+                appendSetterStatement(objectVarName.getIdentifier(), propertyDesc, object, ast, statements);
 
-        return null;
+            }
+
+        }
+
+        return objectVarName;
+    }
+
+    protected SimpleName appendObjectInstanciationStatement(T object, AST ast, List statements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+        String clazzNameString = object.getClass().getSimpleName();
+        String variableNameString = createVariableName(clazzNameString);
+        SimpleName varName = ast.newSimpleName(variableNameString);
+
+        VariableDeclarationFragment newVariable = ast.newVariableDeclarationFragment();
+        newVariable.setName(varName); // Or clazzName.toCamelCase()
+
+        ClassInstanceCreation newInstance = ast.newClassInstanceCreation();
+        newInstance.setType(ast.newSimpleType(ast.newSimpleName(clazzNameString)));
+        newVariable.setInitializer(newInstance);
+
+        VariableDeclarationStatement newObjectStatement = ast.newVariableDeclarationStatement(newVariable);
+        newObjectStatement.setType(ast.newSimpleType(ast.newSimpleName(clazzNameString)));
+
+        statements.add(newObjectStatement);
+        return varName;
+    }
+
+    protected void appendSetterStatement(String callerVariableName, PropertyDescriptor propertyDesc, T caller, AST ast, List statements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+        MethodInvocation setterInvocation = ast.newMethodInvocation();
+
+        SimpleName setterName = ast.newSimpleName(propertyDesc.getWriteMethod().getName());
+        setterInvocation.setName(setterName);
+
+        Object invoked = propertyDesc.getReadMethod().invoke(caller);
+
+        if (invoked == null) {
+            return;
+        }
+
+        JdiValueResolver jdiValueResolver = ResolverFactory.getResolverByClass(invoked.getClass(), loader);
+        setterInvocation.arguments().add(jdiValueResolver.writeExpression(invoked, ast, statements));
+
+        SimpleName newSimpleName = ast.newSimpleName(callerVariableName);
+        setterInvocation.setExpression(newSimpleName);
+
+        ExpressionStatement setterStatement = ast.newExpressionStatement(setterInvocation);
+
+        statements.add(setterStatement);
+    }
+
+    private boolean shouldIgnore(String propertyName) {
+        return "class".equals(propertyName);
     }
 
     protected T newInstance(Class<? extends T> tClass) throws IllegalAccessException, InstantiationException {

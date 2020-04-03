@@ -15,7 +15,9 @@ public class JdiLongResolver extends AbstractJdiPrimitiveTypeResolver<Long, Long
 
     @Override
     public Expression writeExpression(Long object, AST ast, List accumulatedStatements) {
-        return ast.newNumberLiteral(String.valueOf(object));
+        String objectAsString = String.valueOf(object);
+        objectAsString += "L";
+        return ast.newNumberLiteral(objectAsString);
     }
 
 

@@ -15,6 +15,8 @@ public class JdiFloatResolver extends AbstractJdiPrimitiveTypeResolver<Float, Fl
 
     @Override
     public Expression writeExpression(Float object, AST ast, List accumulatedStatements) {
-        return ast.newNumberLiteral(String.valueOf(object));
+        String objectAsString = String.valueOf(object);
+        objectAsString += "F";
+        return ast.newNumberLiteral(objectAsString);
     }
 }

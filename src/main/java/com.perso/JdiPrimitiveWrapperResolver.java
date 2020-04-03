@@ -6,6 +6,8 @@ import com.sun.jdi.PrimitiveValue;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class JdiPrimitiveWrapperResolver extends AbstractJdiPrimitiveTypeResolver<Object, ObjectReference> {
@@ -19,10 +21,10 @@ public class JdiPrimitiveWrapperResolver extends AbstractJdiPrimitiveTypeResolve
     }
 
     @Override
-    public Expression writeExpression(Object object, AST ast, List accumulatedStatements) {
+    public Expression writeExpression(Object object, AST ast, List accumulatedStatements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
         Class primitiveClazz = Primitives.unwrap(object.getClass());
         JdiSimpleTypeResolver primitiveResolver = (JdiSimpleTypeResolver) ResolverFactory.getResolverByClass(primitiveClazz, null);
-        return primitiveResolver.writeExpression(object, ast, );
+        return primitiveResolver.writeExpression(object, ast, accumulatedStatements);
     }
 
 }

@@ -128,18 +128,14 @@ public class CodeGenerator {
         return arrayVariableName;
     }
 
-    public String generateCode(Object object) throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public String generateCode(Object object, UrlClassLoader loader) throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         resetCounter();
 
         AST ast = AST.newAST(AST.JLS3);
         Block block = ast.newBlock();
 
-        if (object instanceof List) {
-            generateArrayCode(ast, block.statements(), (List) object);
-        } else {
-            generateCode(ast, block.statements(), object);
-        }
-
+        JdiValueResolver jdiValueResolver = ResolverFactory.getResolverByClass(object.getClass(), loader);
+        jdiValueResolver.writeExpression(object, ast, block.statements());
         return block.toString();
 
     }

@@ -83,7 +83,7 @@ public class GenerateDebugSource extends AnAction {
             aClass = Class.forName(className, true, loader);
             if (value instanceof ObjectReference) {
                 Object debugObject = codeGenerator.createObjectFromReference(aClass, (ObjectReference) value, loader);
-                String msg = codeGenerator.generateCode(debugObject);
+                String msg = codeGenerator.generateCode(debugObject, loader);
                 Messages.showMessageDialog(msg, "YOO", Messages.getInformationIcon());
             }
         }

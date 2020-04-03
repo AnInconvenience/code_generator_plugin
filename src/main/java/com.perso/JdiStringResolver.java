@@ -3,6 +3,7 @@ package com.perso;
 import com.sun.jdi.StringReference;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class JdiStringResolver implements JdiSimpleTypeResolver<String, StringRe
 
     @Override
     public Expression writeExpression(String object, AST ast, List accumulatedStatements) {
-        return null;
+        StringLiteral newStringLiteral = ast.newStringLiteral();
+        newStringLiteral.setLiteralValue(object);
+        return newStringLiteral;
     }
 }
