@@ -17,6 +17,7 @@ public class ResolverFactory {
     private static JdiBooleanResolver _jdiBooleanResolver = null;
     private static JdiArrayListResolver _jdiListResolver = null;
     private static JdiHashMapResolver _jdiMapResolver = null;
+    private static JdiObjectResolverImpl _jdiObjectResolverImpl = null;
     private static JdiPrimitiveWrapperResolver _jdiPrimitiveWrapperResolver = null;
 
     public static JdiValueResolver getResolverByClass(Class clazz, UrlClassLoader loader) {
@@ -60,7 +61,7 @@ public class ResolverFactory {
                     return getJdiDateResolver(loader);
             }
         }
-        return new JdiObjectResolverImpl(loader);
+        return getJdiObjectResolverImpl(loader);
     }
 
     private final static JdiLongResolver getJdiLongResolver() {
@@ -114,15 +115,17 @@ public class ResolverFactory {
 
     private final static JdiArrayListResolver getJdiListResolver(UrlClassLoader urlClassLoader) {
         if (_jdiListResolver == null) {
-            _jdiListResolver = new JdiArrayListResolver(urlClassLoader);
+            _jdiListResolver = new JdiArrayListResolver();
         }
+        _jdiListResolver.setLoader(urlClassLoader);
         return _jdiListResolver;
     }
 
     private final static JdiHashMapResolver getJdiMapResolver(UrlClassLoader urlClassLoader) {
         if (_jdiMapResolver == null) {
-            _jdiMapResolver = new JdiHashMapResolver(urlClassLoader);
+            _jdiMapResolver = new JdiHashMapResolver();
         }
+        _jdiMapResolver.setLoader(urlClassLoader);
         return _jdiMapResolver;
     }
 
@@ -142,8 +145,9 @@ public class ResolverFactory {
 
     private final static JdiDateResolver getJdiDateResolver(UrlClassLoader urlClassLoader) {
         if (_jdiDateResolver == null) {
-            _jdiDateResolver = new JdiDateResolver(urlClassLoader);
+            _jdiDateResolver = new JdiDateResolver();
         }
+        _jdiDateResolver.setLoader(urlClassLoader);
         return _jdiDateResolver;
     }
 
@@ -152,5 +156,13 @@ public class ResolverFactory {
             _jdiPrimitiveWrapperResolver = new JdiPrimitiveWrapperResolver();
         }
         return _jdiPrimitiveWrapperResolver;
+    }
+
+    public static JdiObjectResolverImpl getJdiObjectResolverImpl(UrlClassLoader urlClassLoader) {
+        if (_jdiObjectResolverImpl == null) {
+            _jdiObjectResolverImpl = new JdiObjectResolverImpl();
+        }
+        _jdiObjectResolverImpl.setLoader(urlClassLoader);
+        return _jdiObjectResolverImpl;
     }
 }

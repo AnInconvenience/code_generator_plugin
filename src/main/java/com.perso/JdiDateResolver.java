@@ -18,10 +18,6 @@ import java.util.List;
 
 public class JdiDateResolver extends AbstractJdiObjectResolver<Date, ObjectReference> {
 
-    public JdiDateResolver(UrlClassLoader loader) {
-        super(loader);
-    }
-
     @Override
     public Date readValue(Class<? extends Date> clazz, ObjectReference objectRef) throws IllegalAccessException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
         LongValue fastTimeVal = (LongValue) objectRef.getValue(objectRef.referenceType().fieldByName("fastTime"));
@@ -37,6 +33,6 @@ public class JdiDateResolver extends AbstractJdiObjectResolver<Date, ObjectRefer
                 .findFirst()
                 .orElse(null);
         appendSetterStatement(dateInstanciation.getIdentifier(), setTimePropDesc , object, ast, statements);
-        return dateInstanciation;
+        return ast.newSimpleName(dateInstanciation.getIdentifier());
     }
 }

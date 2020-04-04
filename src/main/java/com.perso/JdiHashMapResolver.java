@@ -10,10 +10,6 @@ import java.util.Map;
 
 public class JdiHashMapResolver extends AbstractJdiObjectResolver<Map, ObjectReference> {
 
-    public JdiHashMapResolver(UrlClassLoader loader) {
-        super(loader);
-    }
-
     @Override
     public Map readValue(Class<? extends Map> clazz, ObjectReference objectRef) throws IllegalAccessException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
         ArrayReference arr = (ArrayReference) objectRef.getValue(objectRef.referenceType().fieldByName("table"));

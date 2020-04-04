@@ -19,14 +19,14 @@ import java.util.Map;
 public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> implements JdiObjectResolver<T, V> {
     protected UrlClassLoader loader;
 
+    public void setLoader(UrlClassLoader loader) {
+        this.loader = loader;
+    }
+
     protected int counter = 0;
 
     protected String createVariableName(String clazzName) {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazzName + counter++);
-    }
-
-    public AbstractJdiObjectResolver(UrlClassLoader loader) {
-        this.loader = loader;
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, clazzName + ++counter);
     }
 
     @Override
@@ -56,7 +56,7 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
 
         }
 
-        return objectVarName;
+        return ast.newSimpleName(objectVarName.getIdentifier());
     }
 
     protected SimpleName appendObjectInstanciationStatement(T object, AST ast, List statements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {

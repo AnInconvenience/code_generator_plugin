@@ -13,10 +13,6 @@ import java.util.List;
 
 public class JdiArrayListResolver extends AbstractJdiObjectResolver<List, ObjectReference>{
 
-    public JdiArrayListResolver(UrlClassLoader loader) {
-        super(loader);
-    }
-
     @Override
     public List readValue(Class<? extends List> clazz, ObjectReference objectRef) throws IllegalAccessException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
         ArrayReference arrayVal = (ArrayReference) objectRef.getValue(objectRef.referenceType().fieldByName("elementData"));
@@ -47,6 +43,6 @@ public class JdiArrayListResolver extends AbstractJdiObjectResolver<List, Object
             ExpressionStatement addStatement = ast.newExpressionStatement(addInvocation);
             statements.add(addStatement);
         }
-        return arrayVariableName;
+        return ast.newSimpleName(arrayVariableName.getIdentifier());
     }
 }
