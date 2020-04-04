@@ -1,6 +1,5 @@
 package com.perso;
 
-import com.intellij.util.lang.UrlClassLoader;
 import com.sun.jdi.ArrayReference;
 import com.sun.jdi.ObjectReference;
 import com.sun.jdi.Value;
@@ -19,11 +18,11 @@ public class JdiHashMapResolver extends AbstractJdiObjectResolver<Map, ObjectRef
             ObjectReference nodeObj = (ObjectReference)node;
             Value mapKey = nodeObj.getValue(nodeObj.referenceType().fieldByName("key"));
             Class keyClass = getClassFromName(mapKey.type().name());
-            JdiValueResolver keyResolver = ResolverFactory.getResolverByClass(keyClass, loader);
+            JdiValueResolver keyResolver = ResolverFactory.getResolverByClass(keyClass, classLoader);
 
             Value mapValue = nodeObj.getValue(nodeObj.referenceType().fieldByName("value"));
             Class valueClass = getClassFromName(mapValue.type().name());
-            JdiValueResolver valueResolver = ResolverFactory.getResolverByClass(valueClass, loader);
+            JdiValueResolver valueResolver = ResolverFactory.getResolverByClass(valueClass, classLoader);
 
             map.put(keyResolver.readValue(keyClass, mapKey), valueResolver.readValue(valueClass, mapValue));
         }

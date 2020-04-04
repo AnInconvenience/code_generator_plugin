@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> implements JdiObjectResolver<T, V> {
-    protected UrlClassLoader loader;
+    protected UrlClassLoader classLoader;
 
-    public void setLoader(UrlClassLoader loader) {
-        this.loader = loader;
+    public void setClassLoader(UrlClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 
     protected int counter = 0;
@@ -37,7 +37,7 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
             Field field = entry.getKey();
             Value value = entry.getValue();
             Class fieldClass = getClassFromName(field.typeName());
-            JdiValueResolver jdiValueResolver =  ResolverFactory.getResolverByClass(fieldClass, loader);
+            JdiValueResolver jdiValueResolver =  ResolverFactory.getResolverByClass(fieldClass, classLoader);
             FieldUtils.writeField(clazz.getDeclaredField(field.name()), result, jdiValueResolver.readValue(fieldClass, value), true);
         }
         return result;
@@ -90,7 +90,7 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
             return;
         }
 
-        JdiValueResolver jdiValueResolver = ResolverFactory.getResolverByClass(invoked.getClass(), loader);
+        JdiValueResolver jdiValueResolver = ResolverFactory.getResolverByClass(invoked.getClass(), classLoader);
         setterInvocation.arguments().add(jdiValueResolver.writeExpression(invoked, ast, statements));
 
         SimpleName newSimpleName = ast.newSimpleName(callerVariableName);
@@ -118,7 +118,7 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
                 fieldClass = Class.forName(name);
             }
         } catch (ClassNotFoundException e) {
-            fieldClass = Class.forName(name, true, loader);
+            fieldClass = Class.forName(name, true, classLoader);
         }
         return fieldClass;
     }

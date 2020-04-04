@@ -117,7 +117,7 @@ public class ResolverFactory {
         if (_jdiListResolver == null) {
             _jdiListResolver = new JdiArrayListResolver();
         }
-        _jdiListResolver.setLoader(urlClassLoader);
+        _jdiListResolver.setClassLoader(urlClassLoader);
         return _jdiListResolver;
     }
 
@@ -125,7 +125,7 @@ public class ResolverFactory {
         if (_jdiMapResolver == null) {
             _jdiMapResolver = new JdiHashMapResolver();
         }
-        _jdiMapResolver.setLoader(urlClassLoader);
+        _jdiMapResolver.setClassLoader(urlClassLoader);
         return _jdiMapResolver;
     }
 
@@ -147,7 +147,7 @@ public class ResolverFactory {
         if (_jdiDateResolver == null) {
             _jdiDateResolver = new JdiDateResolver();
         }
-        _jdiDateResolver.setLoader(urlClassLoader);
+        _jdiDateResolver.setClassLoader(urlClassLoader);
         return _jdiDateResolver;
     }
 
@@ -162,7 +162,7 @@ public class ResolverFactory {
         if (_jdiObjectResolverImpl == null) {
             _jdiObjectResolverImpl = new JdiObjectResolverImpl();
         }
-        _jdiObjectResolverImpl.setLoader(urlClassLoader);
+        _jdiObjectResolverImpl.setClassLoader(urlClassLoader);
         return _jdiObjectResolverImpl;
     }
 }

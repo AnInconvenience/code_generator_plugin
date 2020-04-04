@@ -1,6 +1,5 @@
 package com.perso;
 
-import com.intellij.util.lang.UrlClassLoader;
 import com.sun.jdi.ArrayReference;
 import com.sun.jdi.ObjectReference;
 import com.sun.jdi.Value;
@@ -20,7 +19,7 @@ public class JdiArrayListResolver extends AbstractJdiObjectResolver<List, Object
         for (Value v : arrayVal.getValues()) {
             if (v == null) continue;
             Class arrayItemClass = getClassFromName(v.type().name());
-            JdiValueResolver jvr = ResolverFactory.getResolverByClass(arrayItemClass, loader);
+            JdiValueResolver jvr = ResolverFactory.getResolverByClass(arrayItemClass, classLoader);
             list.add(jvr.readValue(arrayItemClass, v));
         }
         return list;
@@ -35,7 +34,7 @@ public class JdiArrayListResolver extends AbstractJdiObjectResolver<List, Object
             SimpleName addSimpleName = ast.newSimpleName("add");
             addInvocation.setName(addSimpleName);
 
-            JdiValueResolver jdiValueResolver = ResolverFactory.getResolverByClass(o.getClass(), loader);
+            JdiValueResolver jdiValueResolver = ResolverFactory.getResolverByClass(o.getClass(), classLoader);
             addInvocation.arguments().add(jdiValueResolver.writeExpression(o, ast, statements));
 
             SimpleName arraySimpleName = ast.newSimpleName(arrayVariableName.getIdentifier());
