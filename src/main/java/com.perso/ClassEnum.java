@@ -7,8 +7,8 @@ import java.util.*;
 public enum ClassEnum {
     LONG(Long.class),
     LONG_PRIMITIVE(long.class),
-    CHAR(char.class),
-    CHAR_PRIMITIVE(Character.class),
+    CHAR(Character.class),
+    CHAR_PRIMITIVE(char.class),
     BYTE(Byte.class),
     BYTE_PRIMITIVE(byte.class),
     SHORT(Short.class),

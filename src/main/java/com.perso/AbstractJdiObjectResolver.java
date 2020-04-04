@@ -19,8 +19,12 @@ import java.util.Map;
 public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> implements JdiObjectResolver<T, V> {
     protected UrlClassLoader classLoader;
 
-    public void setClassLoader(UrlClassLoader classLoader) {
+    public final void setClassLoader(UrlClassLoader classLoader) {
         this.classLoader = classLoader;
+    }
+
+    public final void resetCounter() {
+        this.counter = 0;
     }
 
     protected int counter = 0;
@@ -78,7 +82,7 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
         return varName;
     }
 
-    protected void appendSetterStatement(String callerVariableName, PropertyDescriptor propertyDesc, T caller, AST ast, List statements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+    protected final void appendSetterStatement(String callerVariableName, PropertyDescriptor propertyDesc, T caller, AST ast, List statements) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
         MethodInvocation setterInvocation = ast.newMethodInvocation();
 
         SimpleName setterName = ast.newSimpleName(propertyDesc.getWriteMethod().getName());

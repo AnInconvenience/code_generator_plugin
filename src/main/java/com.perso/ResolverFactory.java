@@ -2,6 +2,9 @@ package com.perso;
 
 import com.intellij.util.lang.UrlClassLoader;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ResolverFactory {
 
     //final UrlClassLoader urlClassLoader;
@@ -20,6 +23,14 @@ public class ResolverFactory {
     private static JdiObjectResolverImpl _jdiObjectResolverImpl = null;
     private static JdiPrimitiveWrapperResolver _jdiPrimitiveWrapperResolver = null;
 
+    public static List<AbstractJdiObjectResolver> getResolversWithCounters() {
+        return Arrays.asList(
+                getJdiDateResolver(null),
+                getJdiListResolver(null),
+                getJdiMapResolver(null),
+                getJdiObjectResolverImpl(null)
+        );
+    }
     public static JdiValueResolver getResolverByClass(Class clazz, UrlClassLoader loader) {
         ClassEnum javaBasicClass = ClassEnum.getByClass(clazz);
         if (javaBasicClass != null) {
@@ -117,6 +128,7 @@ public class ResolverFactory {
         if (_jdiListResolver == null) {
             _jdiListResolver = new JdiArrayListResolver();
         }
+        if (urlClassLoader != null)
         _jdiListResolver.setClassLoader(urlClassLoader);
         return _jdiListResolver;
     }
