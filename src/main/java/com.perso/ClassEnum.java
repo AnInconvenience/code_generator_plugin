@@ -1,7 +1,5 @@
 package com.perso;
 
-import com.sun.jdi.BooleanValue;
-
 import java.util.*;
 
 public enum ClassEnum {
@@ -34,15 +32,15 @@ public enum ClassEnum {
         this.clazz = clazz;
     }
 
-    private static final Map<Class, ClassEnum> classMap;
-    private static final Map<String, ClassEnum> simpleTypes;
+    private static final Map<Class, ClassEnum> reverseLookupMap;
+    private static final Map<String, ClassEnum> primitiveTypes;
 
     static {
         Map m = new HashMap();
         for (ClassEnum classEnum : ClassEnum.values()) {
             m.put(classEnum.clazz, classEnum);
         }
-        classMap = Collections.unmodifiableMap(m);
+        reverseLookupMap = Collections.unmodifiableMap(m);
 
 
         Map map = new HashMap();
@@ -54,15 +52,15 @@ public enum ClassEnum {
         map.put(Integer.TYPE.getSimpleName(), INTEGER_PRIMITIVE);
         map.put(Long.TYPE.getSimpleName(), LONG_PRIMITIVE);
         map.put(Short.TYPE.getSimpleName(), SHORT_PRIMITIVE);
-        simpleTypes = Collections.unmodifiableMap(map);
+        primitiveTypes = Collections.unmodifiableMap(map);
     }
 
     public static ClassEnum getByClass(Class aClass) {
-        return classMap.get(aClass);
+        return reverseLookupMap.get(aClass);
     }
 
     public static Class getPrimitiveClass(String primitiveName) {
-        ClassEnum classEnum = simpleTypes.get(primitiveName);
+        ClassEnum classEnum = primitiveTypes.get(primitiveName);
         if (classEnum == null) {
             return null;
         }

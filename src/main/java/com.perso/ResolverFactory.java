@@ -32,6 +32,9 @@ public class ResolverFactory {
         );
     }
     public static JdiValueResolver getResolverByClass(Class clazz, UrlClassLoader loader) {
+        if (clazz.isArray()) {
+            return new JdiArrayResolver();
+        }
         ClassEnum javaBasicClass = ClassEnum.getByClass(clazz);
         if (javaBasicClass != null) {
             switch (javaBasicClass) {

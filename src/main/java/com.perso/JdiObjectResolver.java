@@ -5,5 +5,5 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Statement;
 
 public interface JdiObjectResolver<T, V extends ObjectReference> extends JdiValueResolver<T,V> {
-
+    Class getClassFromName(String name) throws ClassNotFoundException;
 }

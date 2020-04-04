@@ -40,6 +40,7 @@ public abstract class AbstractJdiObjectResolver<T,V extends ObjectReference> imp
         for (Map.Entry<Field, Value> entry : valueMap.entrySet()) {
             Field field = entry.getKey();
             Value value = entry.getValue();
+            if (value == null) continue;
             Class fieldClass = getClassFromName(field.typeName());
             JdiValueResolver jdiValueResolver =  ResolverFactory.getResolverByClass(fieldClass, classLoader);
             FieldUtils.writeField(clazz.getDeclaredField(field.name()), result, jdiValueResolver.readValue(fieldClass, value), true);
